@@ -1,5 +1,5 @@
 import ftplib
-import os
+import os.chdir
 
 def up(host,username,password,directory,file):
 	os.chdir(directory)

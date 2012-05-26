@@ -2,20 +2,18 @@ import os
 import shutil
 import distutils.dir_util
 import time
-import ftpprog
+import transferProg
 
 #File Variables
-savePath = "/Users/ssimpson/backup/"
+savePath = "/path/to/backup/"
 files = [
-"/Users/ssimpson/RTM/",
-"/Users/ssimpson/Public",
-"/Users/ssimpson/Books/Cisco Books/IPV6/Cisco.Press.Global.IPv6.Strategies.pdf"
+"/path/to/files"
 ]
 
 #FTP Variables
-ftp_server = "thisisnotaserver.com"
-ftp_username = "dir@thisisnotaserver.com"
-ftp_password = "0wgzt8bTUGJ9"
+ftp_server = ""
+ftp_username = ""
+ftp_password = ""
 
 ######## You should'nt need to edit below this line ########
 
@@ -35,7 +33,7 @@ for i in files:
 print "Files backed up! Lets zip..."
 
 #Make the Archive
-shutil.make_archive(savePath + "backup-" + time.strftime("%m%d%y"),"zip","/Users/ssimpson/backup/")
+shutil.make_archive(savePath + "backup-" + time.strftime("%m%d%y"),"zip",savePath)
 print "And we're zipped! Onto the FTP portion of the tour..."
 
 #FTP - Use the following style -- up(host,username,password,directory,file)
