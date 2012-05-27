@@ -37,6 +37,6 @@ shutil.make_archive(savePath + "backup-" + time.strftime("%m%d%y"),"zip",savePat
 print "And we're zipped! Onto the FTP portion of the tour..."
 
 #FTP - Use the following style -- up(host,username,password,directory,file)
-transferProg.up(ftp_server,ftp_username,ftp_password,savePath,"backup-" + time.strftime("%m%d%y") +".zip")
+transferProg.ftpup(ftp_server,ftp_username,ftp_password,savePath,"backup-" + time.strftime("%m%d%y") +".zip")
 
 print "FTP has finished!"

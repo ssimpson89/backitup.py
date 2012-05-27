@@ -1,7 +1,7 @@
 import ftplib
 import os.chdir
 
-def up(host,username,password,directory,file):
+def ftpup(host,username,password,directory,file):
 	os.chdir(directory)
 	s = ftplib.FTP(host,username,password) # Connect
 	f = open(file,'rb')                # file to send
