@@ -1,4 +1,3 @@
-import os
 import shutil
 import distutils.dir_util
 import time
