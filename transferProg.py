@@ -1,5 +1,5 @@
 import ftplib
-import os.chdir
+import os
 
 def ftpup(host,username,password,directory,file):
 	os.chdir(directory)
