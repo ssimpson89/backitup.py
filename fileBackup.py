@@ -19,6 +19,13 @@ ftp_server = ""
 ftp_username = ""
 ftp_password = ""
 
+#SFTP/SCP Variables
+sftpCheck = 0
+ssh_server = ""
+ssh_username = ""
+ssh_password = ""
+ssh_path = "" # Where this is going on the server end
+
 #MySQL Variables
 mysqlCheck = 1 # 1 if you want mysqldumps to be enabled, 0 if you do not
 mysql_host = ""
@@ -27,6 +34,7 @@ mysql_pass = ""
 #Use all if you want every database. If not just seperate it with a comma
 mysql_db = [
 ]
+
 
 zipDelete = 0 # 1 if you want the zip file to be deleted. 0 is useful if you want local backups
 
@@ -44,11 +52,7 @@ except:
 for i in files:
 	try:
 		if os.path.isdir(i):
-	
-			if i.split("/"[0])[-1] == "":
-				distutils.dir_util.copy_tree(i,savePath2 + i.split("/"[0])[-2])
-			else:
-				distutils.dir_util.copy_tree(i,savePath2 + i.split("/"[0])[-1])
+			distutils.dir_util.copy_tree(i,savePath2 + i)
 		else:
 			shutil.copy2(i,savePath2)
 	except:
@@ -72,12 +76,18 @@ tar = tarfile.open(savePath + archive,mode='w:gz')
 tar.add(savePath2)
 tar.close()
 
-print "And we're zipped! Onto the FTP portion of the tour..."
+print "And we're zipped!"
 
 #FTP - Use the following style -- up(host,username,password,directory,file)
 if ftpCheck == 1:
 	transferProg.ftpup(ftp_server,ftp_username,ftp_password,savePath,archive)
 	print "FTP has finished!"
+#SFTP - DESTINATION MUST INCLUDE FILENAME
+
+if sftpCheck == 1:
+	transferProg.sftpup(ssh_server,ssh_username,ssh_password,savePath + archive,ssh_path + archive)
+
+#SCP
 
 #Remove stuff
 
