@@ -1,1 +1,20 @@
-ITS A README
+This is a simple backup script primarily for linux (May work on others such as Mac and windows as long as you dont use mysql. However it has not been tested). Features include:
+
+- Custom selection of multiple files and folder paths
+- Mysql Dumps (currently via a sub process but will be upgraded to mysqlDB soon)
+- Tar.GZ backups
+- FTP and SFTP support
+
+Future plans:
+
+- Zip support
+- Amazon S3 bucket support
+- Dropbox support 
+- Google Drive support
+- Windows Sky Drive support
+- Samba (Well maybe…samba is stupid)
+- Upgrade to mysqldb and stop using sub processes
+- Email selected address completion or error message
+
+- File management
+-- Meaning the script will control how many files are kept on the server and disk at a given time. (Meaning only, lets say 5 backups will be kept on the remote server no matter where that be)
