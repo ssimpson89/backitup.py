@@ -1,8 +1,11 @@
 import ftplib
-import paramiko
 import os
 import sys
-
+try:	
+	import paramiko
+except:
+	print("Paramiko is not installed. Visit lag.net/paramiko")
+	
 def ftpup(host,username,password,directory,file):
 	os.chdir(directory)
 	s = ftplib.FTP(host,username,password) # Connect
