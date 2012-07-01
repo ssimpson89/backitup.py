@@ -11,6 +11,7 @@ import gzip
 #File Variables
 savePath = ""
 files = [
+""
 ]
 
 #FTP Variables
@@ -26,8 +27,14 @@ ssh_username = ""
 ssh_password = ""
 ssh_path = "" # Where this is going on the server end
 
+#DropBox Variables  
+dbCheck = 1
+dbPath = ""
+dbUser = ""
+dbPassword = "" #NOTE: Your password is stored in this app in clear text but sent over SSL. If you want to be prompted leave this empty (obviously wont work for automated backups)
+
 #MySQL Variables
-mysqlCheck = 1 # 1 if you want mysqldumps to be enabled, 0 if you do not
+mysqlCheck = 0 # 1 if you want mysqldumps to be enabled, 0 if you do not
 mysql_host = ""
 mysql_user = ""
 mysql_pass = ""
@@ -36,11 +43,10 @@ mysql_db = [
 ]
 
 
-zipDelete = 0 # 1 if you want the zip file to be deleted. 0 is useful if you want local backups
+zipDelete = 1 # 1 if you want the zip file to be deleted. 0 is useful if you want local backups
 
 ######## You should not need to edit below this line ########
 
-print savePath
 if savePath[-1] != "/":
         savePath = savePath + "/"
 savePath2 = savePath + "files/"
@@ -87,7 +93,14 @@ if ftpCheck == 1:
 if sftpCheck == 1:
 	transferProg.sftpup(ssh_server,ssh_username,ssh_password,savePath + archive,ssh_path + archive)
 
-#SCP
+#Dropbox
+if dbCheck == 1:
+	if dbPassword == "":
+		import getpass
+		dbPassword = getpass.getpass("Please enter your password: ")
+	if dbPath[-1] != "/":
+	        dbPath = dbPath + "/"
+	transferProg.dropbox(savePath + archive,dbPath,archive,dbUser,dbPassword)
 
 #Remove stuff
 

@@ -4,12 +4,12 @@ This is a simple backup script primarily for linux (May work on others such as M
 - Mysql Dumps (currently via a sub process but will be upgraded to mysqlDB soon)
 - Tar.GZ backups
 - FTP and SFTP support
+- DropBox support
 
 Future plans:
 
 - Zip support
 - Amazon S3 bucket support
-- Dropbox support 
 - Google Drive support
 - Windows Sky Drive support
 - Samba (Well maybe…samba is stupid)

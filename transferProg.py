@@ -16,7 +16,7 @@ def sftpup(host,username,password,file,path):
     try:    
 	    import paramiko
     except:
-	    print("Paramiko is not installed. Visit lag.net/paramiko")
+    	print("Paramiko is not installed. Visit lag.net/paramiko")
 	ssh = paramiko.SSHClient() 
 	ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 	ssh.load_host_keys(os.path.expanduser(os.path.join("~", ".ssh", "known_hosts")))
@@ -26,3 +26,12 @@ def sftpup(host,username,password,file,path):
 	sftp.close()
 	ssh.close()	
 
+def dropbox(local_file,remote_dir,remote_file,email,password):
+	try:
+		import mechanize
+	except:
+		print("Please install mechanize first")
+	from dbconn import DropboxConnection
+	conn = DropboxConnection(email, password)
+	conn.upload_file(local_file,remote_dir,remote_file)
+	print("File uploaded as " + remote_dir + remote_file)
