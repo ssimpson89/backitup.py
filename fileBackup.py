@@ -9,9 +9,9 @@ import gzip
 
 
 #File Variables
-savePath = ""
+savePath = "/Users/ssimpson/Backup/"
 files = [
-""
+"/Users/ssimpson/Calibre Library/"
 ]
 
 #FTP Variables
@@ -28,10 +28,16 @@ ssh_password = ""
 ssh_path = "" # Where this is going on the server end
 
 #DropBox Variables  
-dbCheck = 1
+dbCheck = 0
 dbPath = ""
 dbUser = ""
 dbPassword = "" #NOTE: Your password is stored in this app in clear text but sent over SSL. If you want to be prompted leave this empty (obviously wont work for automated backups)
+
+#s3 Variables
+s3Check = 0
+s3Bucket = ""
+s3Key = ""
+s3Secret = ""
 
 #MySQL Variables
 mysqlCheck = 0 # 1 if you want mysqldumps to be enabled, 0 if you do not
@@ -42,8 +48,8 @@ mysql_pass = ""
 mysql_db = [
 ]
 
-
-zipDelete = 1 # 1 if you want the zip file to be deleted. 0 is useful if you want local backups
+tarZip = "zip" #Type 'zip' for zip and 'tar' to tar.gz
+zipDelete = 0 # 1 if you want the zip file to be deleted. 0 is useful if you want local backups
 
 ######## You should not need to edit below this line ########
 
@@ -63,8 +69,8 @@ for i in files:
 			shutil.copy2(i,savePath2)
 	except:
 		pass
+		
 #Dump the databases
-
 if mysqlCheck == 1:
 	os.mkdir(savePath2 + "sql/")
         for i in mysql_db:
@@ -77,10 +83,23 @@ if mysqlCheck == 1:
 print "Files backed up! Lets zip..."
 
 #Make the Archive
-archive = "backup-" + time.strftime("%m%d%y") + ".tar.gz"
-tar = tarfile.open(savePath + archive,mode='w:gz')
-tar.add(savePath2)
-tar.close()
+if tarZip == "tar":
+	archive = "backup-" + time.strftime("%m%d%y") + ".tar.gz"
+	tar = tarfile.open(savePath + archive,mode='w:gz')
+	tar.add(savePath2)
+	tar.close()
+elif tarZip =="zip":
+	try:
+		import zipfile
+	except:
+		print("Please install zipfile")
+	archive = "backup-" + time.strftime("%m%d%y") + ".zip"
+	zip = zipfile.ZipFile(savePath + archive, 'w', zipfile.ZIP_DEFLATED)
+	rootlen = len(savePath2) + 1
+	for base, dirs, files in os.walk(savePath2):
+		for file in files:
+			fn = os.path.join(base, file)
+			zip.write(fn, fn[rootlen:])
 
 print "And we're zipped!"
 
@@ -88,8 +107,8 @@ print "And we're zipped!"
 if ftpCheck == 1:
 	transferProg.ftpup(ftp_server,ftp_username,ftp_password,savePath,archive)
 	print "FTP has finished!"
-#SFTP - DESTINATION MUST INCLUDE FILENAME
 
+#SFTP - DESTINATION MUST INCLUDE FILENAME
 if sftpCheck == 1:
 	transferProg.sftpup(ssh_server,ssh_username,ssh_password,savePath + archive,ssh_path + archive)
 
@@ -100,7 +119,13 @@ if dbCheck == 1:
 		dbPassword = getpass.getpass("Please enter your password: ")
 	if dbPath[-1] != "/":
 	        dbPath = dbPath + "/"
-	transferProg.dropbox(savePath + archive,dbPath,archive,dbUser,dbPassword)
+	conn = transferProg.dbup(dbUser,dbPassword)
+	conn.upload_file(savePath + archive,dbPath,archive)
+	print("File uploaded as " + dbPath + archive)
+
+#Amazon S3 
+if s3Check == 1:
+	transferProg.s3up(s3Bucket,s3Key,s3Secret,archive,savePath) 
 
 #Remove stuff
 
