@@ -9,7 +9,7 @@ import gzip
 
 
 #File Variables
-savePath = "/temporary/backup/path" #This is just the path where we want to temporarily store the files
+savePath = "/path/to/store/backup" #This is just the path where we want to temporarily store the files
 files = [      #Add Files or Folders in quotes, 1 per line. Make sure the line ends with a comma
 "/path/to/files",
 ]
@@ -38,6 +38,11 @@ s3Check = 0
 s3Bucket = ""
 s3Key = ""
 s3Secret = ""
+
+#Google Drive
+gdCheck = 0
+gdUser = ""
+gdPassword = "" #NOTE: Your password is stored in this app in clear text but sent over SSL. If you want to be prompted leave this empty (obviously wont work for automated backups)
 
 #MySQL Variables
 mysqlCheck = 0 # 1 if you want mysqldumps to be enabled, 0 if you do not
@@ -116,7 +121,7 @@ if sftpCheck == 1:
 if dbCheck == 1:
 	if dbPassword == "":
 		import getpass
-		dbPassword = getpass.getpass("Please enter your password: ")
+		dbPassword = getpass.getpass("Please enter your Dropbox password: ")
 	if dbPath[-1] != "/":
 	        dbPath = dbPath + "/"
 	conn = transferProg.dbup(dbUser,dbPassword)
@@ -126,6 +131,13 @@ if dbCheck == 1:
 #Amazon S3 
 if s3Check == 1:
 	transferProg.s3up(s3Bucket,s3Key,s3Secret,archive,savePath) 
+
+#Google Drive
+if gdCheck == 1:
+	if gdPassword == "":
+		import getpass
+		gdPassword = getpass.getpass("Please enter your Google password: ")
+	transferProg.gdriveup(gdUser,gdPassword,archive,savePath + archive)
 
 #Remove stuff
 

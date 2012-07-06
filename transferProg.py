@@ -144,4 +144,38 @@ def s3up(s3Bucket,s3Key,s3Secret,file,path):
 	k.set_contents_from_string(file)
 	print(file + " has been uploaded to " + s3Bucket)
 
+#Google Drive Connection
+def gdriveup(email,password,archive,path):
+	try:
+		import gdata.data
+		import gdata.acl.data
+		import gdata.docs.client
+		import gdata.docs.service
+		import gdata.docs.data
+		import gdata.sample_util
+		import argparse
+	except:
+		print("Make sure gdata and argparse are installed")
+	
+	APP_NAME = 'PythonBackup'
+	DEBUG = False
+	client = gdata.docs.client.DocsClient(source=APP_NAME)
+	client.http_client.debug = DEBUG
 
+	# Authenticate the user with CLientLogin, OAuth, or AuthSub.
+	try:
+		client.ClientLogin(email, password, APP_NAME)
+	except gdata.client.BadAuthentication:
+	  exit('Invalid user credentials given.')
+	except gdata.client.Error:
+	  exit('Login Error')
+	  
+	# Give the document a title and put the location of the file to be uploaded in LOCAL_FILE
+	DOC_TITLE=archive
+	LOCAL_FILE=path
+	doc = gdata.docs.data.Resource(type='document', title=DOC_TITLE)
+	media = gdata.data.MediaSource()
+	media.SetFileHandle(LOCAL_FILE, 'application/octet-stream')
+	create_uri = gdata.docs.client.RESOURCE_UPLOAD_URI + '?convert=false'
+	upload_doc = client.CreateResource(doc, create_uri=create_uri, media=media)
+	
