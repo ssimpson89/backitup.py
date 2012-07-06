@@ -9,9 +9,9 @@ import gzip
 
 
 #File Variables
-savePath = "/Users/ssimpson/Backup/"
-files = [
-"/Users/ssimpson/Calibre Library/"
+savePath = "/temporary/backup/path" #This is just the path where we want to temporarily store the files
+files = [ #Add Files in quotes, 1 per line. Make sure the line ends with a comma
+"/path/to/files",
 ]
 
 #FTP Variables
@@ -21,14 +21,14 @@ ftp_username = ""
 ftp_password = ""
 
 #SFTP/SCP Variables
-sftpCheck = 0
+sftpCheck = 0 # 1 is you want sftp enabled
 ssh_server = ""
 ssh_username = ""
 ssh_password = ""
 ssh_path = "" # Where this is going on the server end
 
 #DropBox Variables  
-dbCheck = 0
+dbCheck = 0 # 1 is you want dropbox enabled
 dbPath = ""
 dbUser = ""
 dbPassword = "" #NOTE: Your password is stored in this app in clear text but sent over SSL. If you want to be prompted leave this empty (obviously wont work for automated backups)
@@ -44,7 +44,7 @@ mysqlCheck = 0 # 1 if you want mysqldumps to be enabled, 0 if you do not
 mysql_host = ""
 mysql_user = ""
 mysql_pass = ""
-#Use all if you want every database. If not just seperate it with a comma
+#Use all if you want every database in quotes. If not just seperate each line in quotes ending with a comma
 mysql_db = [
 ]
 
