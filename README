@@ -9,12 +9,15 @@ This is a simple backup script primarily for linux (May work on others such as M
 - Google Drive support
 
 Future plans:
-- Windows Sky Drive support (This is probably not possible)
-- Samba (Well maybe…samba is stupid)
+
 - Upgrade to mysqldb and stop using sub processes
 - Email selected address completion or error message (Pipe it to mail in linux for now)
-
 - File management
 -- Meaning the script will control how many files are kept on the server and disk at a given time. (Meaning only, lets say 5 backups will be kept on the remote server no matter where that be)
-
 - Change over to 1 big class rather than if statements
+
+Scratched Plans (Unless someone really really wants it)
+
+- Windows Sky Drive support (This is probably not possible)
+- Samba
+- NFS
