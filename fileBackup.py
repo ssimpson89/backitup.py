@@ -10,7 +10,7 @@ import gzip
 
 #File Variables
 savePath = "/temporary/backup/path" #This is just the path where we want to temporarily store the files
-files = [ #Add Files in quotes, 1 per line. Make sure the line ends with a comma
+files = [      #Add Files or Folders in quotes, 1 per line. Make sure the line ends with a comma
 "/path/to/files",
 ]
 

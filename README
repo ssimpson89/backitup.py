@@ -10,7 +10,7 @@ This is a simple backup script primarily for linux (May work on others such as M
 Future plans:
 
 - Google Drive support
-- Windows Sky Drive support
+- Windows Sky Drive support (This is probably not possible)
 - Samba (Well maybe…samba is stupid)
 - Upgrade to mysqldb and stop using sub processes
 - Email selected address completion or error message (Pipe it to mail in linux for now)
