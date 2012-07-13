@@ -65,7 +65,8 @@ try:
 	os.mkdir(savePath2)
 except:
 	pass	
-#Copy the files over	
+#Copy the files over
+print("Backing up the files")
 for i in files:
 	try:
 		if os.path.isdir(i):
@@ -76,6 +77,7 @@ for i in files:
 		pass
 		
 #Dump the databases
+print("Dumping the databases")
 if mysqlCheck == 1:
 	os.mkdir(savePath2 + "sql/")
         for i in mysql_db:
@@ -85,9 +87,8 @@ if mysqlCheck == 1:
                         subprocess.call("mysqldump --user " + mysql_user + " --password=" + mysql_pass + " --force --flush-privileges " + i + "  > " + savePath2 + "sql/" + i + ".sql", shell=True)
 
 
-print "Files backed up! Lets zip..."
-
 #Make the Archive
+print("Creating the archive")
 if tarZip == "tar":
 	archive = "backup-" + time.strftime("%m%d%y") + ".tar.gz"
 	tar = tarfile.open(savePath + archive,mode='w:gz')
@@ -106,16 +107,18 @@ elif tarZip =="zip":
 			fn = os.path.join(base, file)
 			zip.write(fn, fn[rootlen:])
 
-print "And we're zipped!"
 
 #FTP - Use the following style -- up(host,username,password,directory,file)
 if ftpCheck == 1:
+    print("Uploading to FTP")
 	transferProg.ftpup(ftp_server,ftp_username,ftp_password,savePath,archive)
-	print "FTP has finished!"
+	print("FTP has finished!")
 
 #SFTP - DESTINATION MUST INCLUDE FILENAME
 if sftpCheck == 1:
+    print("Uploading to SFTP")    
 	transferProg.sftpup(ssh_server,ssh_username,ssh_password,savePath + archive,ssh_path + archive)
+    print("SFTP Upload has finished")
 
 #Dropbox
 if dbCheck == 1:
@@ -124,23 +127,31 @@ if dbCheck == 1:
 		dbPassword = getpass.getpass("Please enter your Dropbox password: ")
 	if dbPath[-1] != "/":
 	        dbPath = dbPath + "/"
+    print("Uploading to dropbox")
 	conn = transferProg.dbup(dbUser,dbPassword)
 	conn.upload_file(savePath + archive,dbPath,archive)
 	print("File uploaded as " + dbPath + archive)
 
 #Amazon S3 
 if s3Check == 1:
+    print("Uploading to amazon")
 	transferProg.s3up(s3Bucket,s3Key,s3Secret,archive,savePath) 
+    print("Uploaded to amazon!")
 
 #Google Drive
 if gdCheck == 1:
 	if gdPassword == "":
 		import getpass
 		gdPassword = getpass.getpass("Please enter your Google password: ")
+    print("Uploading to Google Drive/Docs")
 	transferProg.gdriveup(gdUser,gdPassword,archive,savePath + archive)
+    print("Uploaded!")
 
 #Remove stuff
 
 shutil.rmtree(savePath2)
 if zipDelete == 1:
-        os.remove(savePath + archive)
+    os.remove(savePath + archive)
+    print("Zip file deleted")
+
+print("And we're done!")
