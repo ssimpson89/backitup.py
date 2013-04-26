@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>BackItUp.py by stevo81989</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>BackItUp.py</h1>
+        <p>A python script that will eventually backup selected files,dump all databases, zip them up and ftp them over. </p>
+
+        <p class="view"><a href="https://github.com/stevo81989/python-backup">View the Project on GitHub <small>stevo81989/python-backup</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/stevo81989/python-backup/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/stevo81989/python-backup/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/stevo81989/python-backup">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p><strong>Tool is Back In Development…err hopefully</strong>
+This has peaked my interest again. Ive learned quite a bit more (Although not as much as I would like) about since I wrote this. I have an idea. for a new delivery system. Hopefully I get around to fixing it. </p>
+
+<hr><p>This is a simple backup script primarily for linux (May work on others such as Mac and windows as long as you dont use mysql. However it has not been tested). I thought about just using 1 set of username variables, but this long list gives you flexibility and the ability to use multiple backup options (maybe Ill put this in a seperate file). Features include:</p>
+
+<ul>
+<li>Custom selection of multiple files and folder paths</li>
+<li>Mysql Dumps (currently via a sub process but will be upgraded to mysqlDB soon)</li>
+<li>Tar.gz or zip backups</li>
+<li>FTP and SFTP support</li>
+<li>DropBox support</li>
+<li>Amazon S3 support</li>
+<li>Google Drive support</li>
+</ul><p>Future plans:</p>
+
+<ul>
+<li>Upgrade to mysqldb and stop using sub processes</li>
+<li>Email selected address completion or error message (Pipe it to mail in linux for now)</li>
+<li>File management
+-- Meaning the script will control how many files are kept on the server and disk at a given time. (Meaning only, lets say 5 backups will be kept on the remote server no matter where that be)</li>
+<li>Change over to 1 big class in transferProg.py</li>
+<li>box.net support</li>
+</ul><p>Scratched Plans (Unless someone really really wants it)</p>
+
+<ul>
+<li>Windows Sky Drive support (This is probably not possible)</li>
+<li>Samba</li>
+<li>NFS</li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/stevo81989">stevo81989</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
