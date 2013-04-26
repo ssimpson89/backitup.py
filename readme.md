@@ -1,3 +1,8 @@
+**Tool is Back In Development…err hopefully**
+This has peaked my interest again. Ive learned quite a bit more (Although not as much as I would like) about since I wrote this. I have an idea. for a new delivery system. Hopefully I get around to fixing it. 
+
+-----
+
 This is a simple backup script primarily for linux (May work on others such as Mac and windows as long as you dont use mysql. However it has not been tested). I thought about just using 1 set of username variables, but this long list gives you flexibility and the ability to use multiple backup options (maybe Ill put this in a seperate file). Features include:
 
 - Custom selection of multiple files and folder paths
