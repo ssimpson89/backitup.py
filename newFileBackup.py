@@ -1,5 +1,14 @@
 import transferProgram as do
+import simplejson as json
 
-do = do.transfer()
+# Get the API credentials
+with open('creds.json', 'r') as f:
+	creds = json.load(f)
 
-do.s3.up(s3Bucket,s3Key,s3Secret,archive,savePath) 
+archive = ""
+savePath = ""
+
+do = do.transfer.s3()
+creds = creds['s3']
+
+do.ls(creds["bucket"],creds["key"],creds["secret"]) 
