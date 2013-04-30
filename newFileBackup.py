@@ -8,7 +8,7 @@ with open('creds.json', 'r') as f:
 archive = ""
 savePath = ""
 
-do = do.transfer.s3()
 creds = creds['s3']
+do = do.transfer.s3(creds["key"],creds["secret"])
 
-do.ls(creds["bucket"],creds["key"],creds["secret"]) 
+do.list_all_my_buckets(creds["bucket"],) 

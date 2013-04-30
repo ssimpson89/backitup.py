@@ -17,26 +17,108 @@ class transfer:
 			s.quit()
 			
 	class s3:
-		try:
-			from boto.s3.connection import S3Connection
-			from boto.s3.key import Key
-		except:
-			print("Please ensure boto is installed")
-			
-		def up(self,s3Bucket,s3Key,s3Secret,file,path):
-			os.chdir(path)
-			conn = self.S3Connection(s3Key,s3Secret)
-			b = conn.create_bucket(s3Bucket)
-			k = Key(b)
-			k.key = file
-			k.set_contents_from_filename(file)
-			k.set_contents_from_string(file)
-			print(file + " has been uploaded to " + s3Bucket)
-		def ls(self,s3Bucket,s3Key,s3Secret):
-			conn = self.S3Connection(s3Key,s3Secret)
-			bucket = conn.get_bucket(s3Bucket)
-			for key in bucket.list():
-				print key.name.encode('utf-8')			
+		class CallingFormat(object):
+		    PATH = 1
+		    SUBDOMAIN = 2
+		    VANITY = 3
+		    def build_url_base(protocol, server, port, bucket, calling_format):
+		        url_base = '%s://' % protocol
+		        if bucket == '':
+		            url_base += server
+		        elif calling_format == CallingFormat.SUBDOMAIN:
+		            url_base += "%s.%s" % (bucket, server)
+		        elif calling_format == CallingFormat.VANITY:
+		            url_base += bucket
+		        else:
+		            url_base += server
+		        url_base += ":%s" % port
+		        if (bucket != '') and (calling_format == CallingFormat.PATH):
+		            url_base += "/%s" % bucket
+		        return url_base
+		    build_url_base = staticmethod(build_url_base)
+		
+		DEFAULT_HOST = 's3.amazonaws.com'
+		PORTS_BY_SECURITY = {True: 443, False: 80}
+		METADATA_PREFIX = 'x-amz-meta-'
+		AMAZON_HEADER_PREFIX = 'x-amz-'
+		MAX_MEM_FILE_SIZE = 32 * 1024  # body size over this limit is spooled to disc
+
+		def __init__(self, aws_access_key_id, aws_secret_access_key,
+			is_secure=True, server=DEFAULT_HOST, port=None,
+			calling_format=CallingFormat.SUBDOMAIN,
+			spool_size=MAX_MEM_FILE_SIZE):
+			if not port:
+				port = self.PORTS_BY_SECURITY[is_secure]
+			self.aws_access_key_id = aws_access_key_id
+			self.aws_secret_access_key = aws_secret_access_key
+			self.is_secure = is_secure
+			self.server = server
+			self.port = port
+			self.calling_format = calling_format
+			self.spool_size = spool_size		
+
+		def create_bucket(self, bucket, headers=None):
+			return Response(self._make_request('PUT', bucket, '', {}, headers))
+
+		def check_bucket_exists(self, bucket):
+			return self._make_request('HEAD', bucket, '', {}, {})
+
+		def list_bucket(self, bucket, options=None, headers=None):
+			return ListBucketResponse(self._make_request('GET', bucket, '', options, headers))
+
+		def delete_bucket(self, bucket, headers=None):
+			return Response(self._make_request('DELETE', bucket, '', {}, headers))
+
+		def put(self, bucket, key, object, headers=None):
+			if not isinstance(object, S3Object):
+				object = S3Object(object)
+				return Response(self._make_request('PUT', bucket, key, {}, headers, object.data, object.metadata))
+
+		def get(self, bucket, key, headers=None):
+			return GetResponse(self._make_request('GET', bucket, key, {}, headers),
+			self.spool_size)
+
+		def head(self, bucket, key, headers=None):
+			return Response(self._make_request('HEAD', bucket, key, {}, headers))
+
+		def delete(self, bucket, key, headers=None):
+			return Response(self._make_request('DELETE', bucket, key, {}, headers))
+
+		def get_bucket_logging(self, bucket, headers=None):
+			return GetResponse(self._make_request('GET', bucket, '',
+			{'logging': None}, headers))
+	
+		def put_bucket_logging(self, bucket, logging_xml_doc, headers=None):
+			return Response(self._make_request('PUT', bucket, '',
+			{'logging': None}, headers, logging_xml_doc))
+
+		def get_bucket_acl(self, bucket, headers=None):
+			return self.get_acl(bucket, '', headers)
+
+		def get_acl(self, bucket, key, headers=None):
+			return GetResponse(self._make_request('GET', bucket, key,
+			{'acl': None}, headers))
+	
+		def put_bucket_acl(self, bucket, acl_xml_document, headers=None):
+			return self.put_acl(bucket, '', acl_xml_document, headers)
+
+		def put_acl(self, bucket, key, acl_xml_document, headers=None):
+			return Response(self._make_request('PUT', bucket, key, {'acl': None},
+			headers, acl_xml_document))
+
+		def list_all_my_buckets(self, headers=None):
+			return ListAllMyBucketsResponse(self._make_request('GET', '', '', {},
+			headers))
+
+		def get_bucket_location(self, bucket):
+			return LocationResponse(self._make_request('GET', bucket, '',
+			{'location': None}))
+
+
+
+
+
+
 			
 #	class sftp:
 #		
